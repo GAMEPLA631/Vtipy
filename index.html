@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Vtipy</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #111827; /* Tailwind's gray-900 */
+            color: #E5E7EB; /* Tailwind's gray-200 */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 90%;
+            margin-top: 2rem;
+        }
+
+        .joke-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Vlastné animácie pre futuristický dojem */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1; }
+            50% { box-shadow: 0 0 15px #6366f1, 0 0 25px #6366f1; }
+            100% { box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1; }
+        }
+
+        .glow-on-hover {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        .play-button {
+            transition: all 0.2s;
+        }
+        .play-button:hover {
+            transform: scale(1.1);
+            color: #818cf8; /* indigo-400 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="relative w-full max-w-4xl p-8 md:p-12 z-20">
+        <!-- Futuristický titulok s gradientom a tieňom -->
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-10 md:mb-16 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500 drop-shadow-lg animate-pulse">
+            Future vtipy
+        </h1>
+
+        <div id="joke-container" class="space-y-8 flex flex-col items-center">
+            <!-- Tu sa budú dynamicky vkladať vtipy -->
+        </div>
+
+        <div class="flex flex-col items-center justify-center mt-12">
+            <button id="next-joke-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50">
+                Ďalší vtip <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+            <div class="mt-4 text-center text-sm text-gray-400 max-w-xs">
+                Upozornenie: Tieto príbehy môžu obsahovať Copyright alebo Copyright Strike. Nepoužívať.
+            </div>
+        </div>
+    </div>
+
+    <!-- Futuristický ornament na pozadí -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
+        <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute top-3/4 left-3/4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+</body>
+<script>
+    // Pole vtipov, ktoré sa budú zobrazovať
+    const jokes = [
+        "Prečo programátor chodil s dvoma dverami? Lebo chcel mať dvojo dverí, ale nechcel si kúpiť trojo dverí.",
+        "Čo povie jeden vtip druhému vtipu? To je ale vtipné!",
+        "Prečo sa vtáky nikdy nehádajú? Lebo nemajú čas, musia si robiť vtákoviny!",
+        "Stretnú sa dvaja programátori. Jeden hovorí: 'Mám problém s databázou, musím ju presunúť.' Druhý na to: 'A to prečo? Veď máš predsa SQL!'",
+        "Prečo duchovia nikdy nevtipkujú o minulosti? Pretože by to bolo príliš strašidelne predvídateľné a nikto nechce počúvať staré, zaprášené historky.",
+        "Čo povie upír, keď ho pozvete na večeru? 'Ďakujem, ale ja už som jedol. A navyše, preferujem červené, dnes mám chuť na niečo silnejšie.'",
+        "Prečo sa bosorky snažia jazdiť na metlách po celej krajine? Pretože lietanie prvej triedy stojí priveľa peňazí a navyše, metla má lepšie parkovanie.",
+        "ked idem idem tak si userem a padne cely dom ludia ludia pozeraju na mňa či som z neba nepadol a ešťe si pomislia že či som neni padnuty na hlavu.",
+        "Jano išiel išiel a padol do zachoda a ten si nevšimol a musel isť na velku.",
+        "Jano išiel a padol do záchoda, ten si nevšimol a musel ísť na veľkú. Jano prdol a záchod sa rozpadol.",
+        "Bol raz jeden Pán, ktorý sa ráno zobudil a mal strašnú chuť na... uhorku. Otvoril chladničku a uvidel v nej uhorku, ktorá na neho žmurkla. Pán sa tak zľakol, že uhorku pustil, tá sa odrazila od podlahy, preletela otvoreným oknom a pristála rovno na hlave holuba, ktorý sa v tej sekunde premenil na... fialovú, diskotékovú guľu, ktorá začala spievať operné árie a kotúľať sa dole ulicou.",
+        "Prečo YouTuber nikdy neotvorí dvere na prvýkrát? Pretože vždy musí najprv kliknúť na \"preskočiť reklamu\".",
+        "Granny si, ako vždy, v kľude varila svoj \"špeciálny\" mäsový vývar (nikto nechce vedieť, z čoho), keď zrazu zazvonil zvonček. Otvorila dvere a tam stála Evil Nun, s pohľadom takým prísnym, že by sa aj kameň zľakol. \"Sestra, počula som, že máš v receptári tajný recept na perníkovú chalúpku, ktorá je taká lákavá, že priťahuje aj svätých! Potrebujem ju pre náš farský jarmok!\" Granny sa len prefíkane usmiala a povedala: \"Recept dostaneš, ak mi pomôžeš chytiť tú zelenú potvoru, čo mi kradne trpaslíkov zo záhrady!\" V tom momente sa ozvalo hlasné \"Óóóó, aký som krásny!\" a cez plot preletel... Shrek, s dvoma trpaslíkmi pod pazuchou a cibuľou namiesto klobúka. Evil Nun vytiahla pravítko a zaostrila zrak, Granny schmatla svoju tenisovú raketu a Shrek, s výrazom úplného prekvapenia, začal kričať: \"To sú predsa moje dekorácie do bažiny! A odkedy máš záhradu, babka?!\" Nastal chaos – lietali tenisové loptičky, sväté ružence a Shrekove chrochtanie. Nakoniec sa Shrekovi podarilo utiecť s trpaslíkmi, ale cestou stratil cibuľu, ktorú si Evil Nun s Granny rozdelili, aby si z nej uvarili \"odpudivý elixír\" proti ďalším návštevníkom. A recept na perníkovú chalúpku? Ten ostal stále tajný.",
+        "Čo je Baldiho obľúbený hudobný nástroj? Predsa pravítko! Pretože s ním vie vždy udávať ten správny tón.",
+        "Čo robí pavúk na internete? Web stránky!",
+        "Prečo slon nosí zelené tenisky? Aby sa schoval v tráve! Videl si už niekedy slona schovaného v tráve?",
+        "Ako sa volá ryba, ktorá nemá oči? Ryb-a!",
+        "Prečo sa Krampus s Grinchom nikdy nestali najlepšími kamarátmi? Pretože Grinch chcel ukradnúť Vianoce a Krampus zas chcel ukradnúť len tie zlé deti. Stále sa nevedeli dohodnúť, kto má z toho väčší profit!"
+    ];
+
+    let currentJokeIndex = 0;
+    const jokeContainer = document.getElementById('joke-container');
+    const nextJokeBtn = document.getElementById('next-joke-btn');
+    
+    // Funkcia na prečítanie vtipu pomocou zabudovanej syntézy reči v prehliadači
+    function speakJoke(jokeText) {
+        if ('speechSynthesis' in window) {
+            const synth = window.speechSynthesis;
+            // Získaj všetky dostupné hlasy
+            const voices = synth.getVoices();
+            let voiceToUse = null;
+
+            // Nájdeme hlas, ktorý sa zdá byť vtipný alebo aspoň iný (napríklad ženský hlas s vyšším tónom)
+            // Môžeš si vybrať hlas, ktorý sa ti páči, podľa mena.
+            for (let i = 0; i < voices.length; i++) {
+                if (voices[i].lang.startsWith('sk')) { // Preferujeme slovenský hlas
+                    voiceToUse = voices[i];
+                    break;
+                }
+            }
+            // Ak sa nenájde slovenský, použije prvý dostupný hlas
+            if (!voiceToUse && voices.length > 0) {
+                 voiceToUse = voices[0];
+            }
+
+            if (voiceToUse) {
+                const utterance = new SpeechSynthesisUtterance(jokeText);
+                utterance.voice = voiceToUse;
+                utterance.pitch = 1.2; // Jemne vyšší tón
+                utterance.rate = 1.1; // Trochu rýchlejšie hovorenie
+                synth.speak(utterance);
+            } else {
+                console.warn("SpeechSynthesis nie je podporovaný alebo neboli nájdené žiadne hlasy.");
+            }
+        } else {
+            console.error("SpeechSynthesis nie je podporovaný v tomto prehliadači.");
+        }
+    }
+
+    // Funkcia na zobrazenie vtipu na stránke
+    function showJoke(jokeText) {
+        // Vymaže existujúci vtip
+        jokeContainer.innerHTML = '';
+        
+        // Vytvorí nový "futuristický" vtipový kontajner
+        const jokeCard = document.createElement('div');
+        jokeCard.className = "joke-card p-6 md:p-8 rounded-xl shadow-lg w-full max-w-2xl text-center glow-on-hover transition duration-500 ease-in-out transform scale-100 opacity-100";
+        
+        // Kontajner pre vtip a tlačidlo
+        const jokeContent = document.createElement('div');
+        jokeContent.className = "flex flex-col items-center";
+
+        const jokeParagraph = document.createElement('p');
+        jokeParagraph.className = "text-xl md:text-2xl font-light leading-relaxed mb-4";
+        jokeParagraph.textContent = jokeText;
+
+        const playButton = document.createElement('button');
+        playButton.className = "play-button text-indigo-300 hover:text-indigo-400 focus:outline-none text-2xl";
+        playButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+        playButton.onclick = () => speakJoke(jokeText);
+
+        jokeContent.appendChild(jokeParagraph);
+        jokeContent.appendChild(playButton);
+
+        jokeCard.appendChild(jokeContent);
+        jokeContainer.appendChild(jokeCard);
+    }
+
+    // Funkcia na zobrazenie ďalšieho vtipu v poradí
+    function showNextJoke() {
+        currentJokeIndex = (currentJokeIndex + 1) % jokes.length;
+        showJoke(jokes[currentJokeIndex]);
+    }
+
+    // Prvý vtip sa zobrazí po načítaní stránky
+    window.onload = function() {
+        showJoke(jokes[currentJokeIndex]);
+    };
+    
+    // Pridanie poslucháča udalostí na tlačidlo "Ďalší vtip"
+    nextJokeBtn.addEventListener('click', showNextJoke);
+</script>
+</html>
